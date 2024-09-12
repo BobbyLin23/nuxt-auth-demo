@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
   ],
   devServer: {
-    port: 5000,
+    port: 3001,
   },
   shadcn: {
     prefix: '',
@@ -25,6 +25,10 @@ export default defineNuxtConfig({
     '~/components',
     {
       path: '~/components/auth',
+      pathPrefix: false,
+    },
+    {
+      path: '~/components/icon',
       pathPrefix: false,
     },
   ],
