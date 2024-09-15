@@ -1,22 +1,33 @@
 <script setup lang="ts">
-import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import { z } from 'zod'
 
-const formSchema = toTypedSchema(z.object({
-  email: z.string().email({
-    message: 'Email is required',
-  }),
-  password: z.string().min(1, {
-    message: 'Password is required',
-  }),
-}))
+import type { IAuthResponse } from '~/types'
+
+const success = ref<string>('')
+const error = ref<string>('')
+
+const pending = ref<boolean>(false)
 
 const form = useForm({
-  validationSchema: formSchema,
+  validationSchema: LoginSchema,
 })
 
-const onSubmit = form.handleSubmit((values) => {})
+const onSubmit = form.handleSubmit(async (values) => {
+  pending.value = true
+  const { data } = await useFetch<IAuthResponse>('/api/auth/login', {
+    method: 'POST',
+    body: values,
+  })
+
+  if (data.value?.success) {
+    success.value = data.value.success
+  }
+  else if (data.value?.error) {
+    error.value = data.value.error
+  }
+
+  pending.value = false
+})
 </script>
 
 <template>
@@ -45,6 +56,8 @@ const onSubmit = form.handleSubmit((values) => {})
           <FormMessage />
         </FormItem>
       </FormField>
+      <FormSuccess :message="success" />
+      <FormError :error="error" />
       <Button type="submit" class="w-full">
         Submit
       </Button>
