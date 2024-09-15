@@ -7,9 +7,6 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxtjs/google-fonts',
   ],
-  devServer: {
-    port: 3001,
-  },
   shadcn: {
     prefix: '',
     componentDir: './components/ui',
@@ -32,4 +29,9 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  vite: {
+    optimizeDeps: {
+      exclude: ['vee-validate'],
+    },
+  },
 })
